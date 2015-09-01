@@ -1,7 +1,10 @@
 {
   "name": "binary-breeder",
   "version": "0.0.1",
-  "scripts":{
+  "devDependencies": {
+    "mocha": "2.3.0"
+  },
+  "scripts": {
     "test": "mocha"
   }
 }
