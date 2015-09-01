@@ -2,9 +2,13 @@
   "name": "binary-breeder",
   "version": "0.0.1",
   "devDependencies": {
-    "mocha": "2.3.0"
+    "mocha": "2.3.0",
+    "mockery": "^1.4.0"
   },
   "scripts": {
     "test": "mocha"
+  },
+  "dependencies": {
+    "random-js": "^1.0.4"
   }
 }
