@@ -1,10 +1,8 @@
 'use strict';
-
-describe('the binary breeder crossover tests', function() {
+describe('mutation of chromosomes', function() {
     var expect = require('chai').expect;
     var mockery = require('mockery');
 
-    var MUTATION_CHANCE = 0.0;
     var NUM_CHILDREN_TO_PRODUCE = 2;
 
     before(function() {
@@ -27,41 +25,39 @@ describe('the binary breeder crossover tests', function() {
         mockery.disable();
     });
 
-    it('should return two chromosomes with only the last bit swapped when the crossover starting point is length - 1', function() {
-        var parents = ['0100', '1111'];
-        var crossoverStartIndex = parents[0].length - 1;
+    it('should mutate every bit in the resulting chromosomes when the mutation rate is 100%', function() {
+        var parents = ['0000', '1111'];
+        var mutationChance = 1.0;
+        var crossoverStartIndex = parents[0].length;
 
         var mockRandom = getMockRandom();
         mockRandom.setIntegerResult(crossoverStartIndex);
 
         mockery.registerMock('random-js', mockRandom);
 
-        var expectedChildrenChromosomes = ['0101', '1110'];
-
         var reproduce = require('../lib/binary-breeder.js');
 
-        var offspring = reproduce(parents, NUM_CHILDREN_TO_PRODUCE, {mutationChance: MUTATION_CHANCE});
+        var offspring = reproduce(parents, NUM_CHILDREN_TO_PRODUCE, {mutationChance: mutationChance});
 
-
+        var expectedChildrenChromosomes = ['1111', '0000'];
         expect(offspring).to.deep.equal(expectedChildrenChromosomes);
     });
 
-    it('should crossover the entire chromosome when the crossover starting point is 0', function() {
-        var parents = ['0100', '1111'];
-        var crossoverStartIndex = 0;
+    it('should not mutate any bits in the resulting chromosomes when the mutation rate is 0%', function() {
+        var parents = ['0000', '1111'];
+        var mutationChance = 0.0;
+        var crossoverStartIndex = parents[0].length;
 
         var mockRandom = getMockRandom();
         mockRandom.setIntegerResult(crossoverStartIndex);
 
         mockery.registerMock('random-js', mockRandom);
 
-        var expectedChildrenChromosomes = ['1111', '0100'];
-
         var reproduce = require('../lib/binary-breeder.js');
 
-        var offspring = reproduce(parents, NUM_CHILDREN_TO_PRODUCE, {mutationChance: MUTATION_CHANCE});
+        var offspring = reproduce(parents, NUM_CHILDREN_TO_PRODUCE, {mutationChance: mutationChance});
 
-
+        var expectedChildrenChromosomes = ['0000', '1111'];
         expect(offspring).to.deep.equal(expectedChildrenChromosomes);
     });
 
@@ -78,7 +74,7 @@ describe('the binary breeder crossover tests', function() {
             },
             real: function(min, max) {
                 return function(maths) {
-                    return MUTATION_CHANCE;
+                    return 0.0;
                 }
             },
             engines: {
