@@ -22,38 +22,38 @@ describe('validation of binary breeder inputs', function() {
     BAD_CHROMOSOMES_NOT_TWO_ELEMENTS.forEach(function(inputChromosomes) {
         it('should throw an Error when the length of the parent chromosome array is ' + inputChromosomes.length, function() {
             function doTest() {
-                breed(inputChromosomes);
+                breed(inputChromosomes, 2, 0.0001);
             }
 
-            expect(doTest).to.throw;
+            expect(doTest).to.throw(Error);
         });
     });
 
     BAD_CHROMOSOMES_INVALID_CHARACTERS.forEach(function(inputChromosomes, index) {
         it('should throw an Error when the element at index ' + index + ' contains characters not 0 or 1', function() {
             function doTest() {
-                breed(inputChromosomes);
+                breed(inputChromosomes, 2, 0.0001);
             }
 
-            expect(doTest).to.throw;
+            expect(doTest).to.throw(Error);
         });
     });
 
     BAD_CHROMOSOMES_NON_STRING.forEach(function(inputChromosomes, index) {
         it('should throw an Error when the element at index ' + index + ' is not a string', function() {
             function doTest() {
-                breed(inputChromosomes);
+                breed(inputChromosomes, 2, 0.0001);
             }
 
-            expect(doTest).to.throw;
+            expect(doTest).to.throw(Error);
         });
     });
 
     it('should throw an Error when the length of the parent chromosomes are not equal', function() {
         function doTest() {
-            breed(['10001101', '0010110']);
+            breed(['10001101', '0010110'], 2, 0.0001);
         }
 
-        expect(doTest).to.throw;
+        expect(doTest).to.throw(Error);
     });
 });

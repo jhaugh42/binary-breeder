@@ -16,7 +16,7 @@ describe('the number of children produced by the breeder', function() {
             breed(['1010101', '0000001'], 1, 0.001);
         }
 
-        expect(doTest).to.throw;
+        expect(doTest).to.throw(Error);
     });
 
     _testInputs.forEach(function(numOffspring) {
