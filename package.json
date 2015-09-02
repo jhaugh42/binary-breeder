@@ -2,7 +2,7 @@
   "name": "binary-breeder",
   "repository": "https://github.com/jhaugh42/binary-breeder.git",
   "license": "MIT",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "devDependencies": {
     "chai": "^3.2.0",
     "coveralls": "^2.11.4",
