@@ -37,7 +37,7 @@ describe('mutation of chromosomes', function() {
 
         var reproduce = require('../lib/binary-breeder.js');
 
-        var offspring = reproduce(parents, NUM_CHILDREN_TO_PRODUCE, {mutationChance: mutationChance});
+        var offspring = reproduce(parents, NUM_CHILDREN_TO_PRODUCE, mutationChance);
 
         var expectedChildrenChromosomes = ['1111', '0000'];
         expect(offspring).to.deep.equal(expectedChildrenChromosomes);
@@ -55,7 +55,7 @@ describe('mutation of chromosomes', function() {
 
         var reproduce = require('../lib/binary-breeder.js');
 
-        var offspring = reproduce(parents, NUM_CHILDREN_TO_PRODUCE, {mutationChance: mutationChance});
+        var offspring = reproduce(parents, NUM_CHILDREN_TO_PRODUCE, mutationChance);
 
         var expectedChildrenChromosomes = ['0000', '1111'];
         expect(offspring).to.deep.equal(expectedChildrenChromosomes);

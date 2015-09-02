@@ -40,8 +40,7 @@ describe('the binary breeder crossover tests', function() {
 
         var reproduce = require('../lib/binary-breeder.js');
 
-        var offspring = reproduce(parents, NUM_CHILDREN_TO_PRODUCE, {mutationChance: MUTATION_CHANCE});
-
+        var offspring = reproduce(parents, NUM_CHILDREN_TO_PRODUCE, MUTATION_CHANCE);
 
         expect(offspring).to.deep.equal(expectedChildrenChromosomes);
     });
@@ -59,8 +58,7 @@ describe('the binary breeder crossover tests', function() {
 
         var reproduce = require('../lib/binary-breeder.js');
 
-        var offspring = reproduce(parents, NUM_CHILDREN_TO_PRODUCE, {mutationChance: MUTATION_CHANCE});
-
+        var offspring = reproduce(parents, NUM_CHILDREN_TO_PRODUCE, MUTATION_CHANCE);
 
         expect(offspring).to.deep.equal(expectedChildrenChromosomes);
     });
