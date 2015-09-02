@@ -1,3 +1,4 @@
+'use strict';
 
 describe('the binary breeder crossover tests', function() {
     var assert = require('chai').assert;
