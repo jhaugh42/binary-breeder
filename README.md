@@ -9,6 +9,22 @@ Breeds two strings of binary digits and breeds the requested number of offspring
 ##Installation
 `npm install binary-breeder`
 
+##Dev Setup
+```
+npm install -g mocha
+npm install -g istanbul
+```
+
+##Unit Tests
+```
+npm test
+```
+
+##Coverage
+```
+npm run cover
+```
+
 ##Usage
 ```javascript
 var reproduce = require('binary-breeder');
