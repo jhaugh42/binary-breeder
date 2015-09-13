@@ -19,6 +19,15 @@ describe('validation of binary breeder inputs', function() {
         ['10001101', '010abc10']
     ];
 
+    var BAD_INPUT_NON_ARRAYS = [
+        {name: 'integer', data: 12345},
+        {name: 'string of two zeros', data: '00'},
+        {name: 'string of two ones', data: '11'},
+        {name: 'decimal', data: 0.1},
+        {name: 'function', data: function(){}},
+        {name: 'object literal', data: {}}
+    ];
+
     BAD_CHROMOSOMES_NOT_TWO_ELEMENTS.forEach(function(inputChromosomes) {
         it('should throw an Error when the length of the parent chromosome array is ' + inputChromosomes.length, function() {
             function doTest() {
@@ -55,5 +64,15 @@ describe('validation of binary breeder inputs', function() {
         }
 
         expect(doTest).to.throw(Error);
+    });
+
+    BAD_INPUT_NON_ARRAYS.forEach(function(badInput) {
+        it('should throw an Error data type of the input chromosome is ' + badInput.name, function() {
+            function doTest() {
+                breed(badInput.data, 2, 0.0001);
+            }
+
+            expect(doTest).to.throw(Error);
+        });
     });
 });
