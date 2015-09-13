@@ -37,4 +37,14 @@ var parentChromosomes = [
 ];
 
 var offspring = reproduce(parentChromosomes, numOffspring, mutationChance);
+
+/*
+sample output
+
+[ '000010100110110100',
+  '110011001101100101',
+  '110010100111100101',
+  '000011001101110100',
+  '110011001101100101' ]
+*/
 ```
