@@ -2,7 +2,7 @@
   "name": "binary-breeder",
   "repository": "https://github.com/jhaugh42/binary-breeder.git",
   "license": "MIT",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "lib/binary-breeder.js",
   "description": "Breeds the specified number of offspring from two parent strings of binary digits with the possibility of random mutation.",
   "devDependencies": {
