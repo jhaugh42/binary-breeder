@@ -4,6 +4,7 @@
   "license": "MIT",
   "version": "0.1.2",
   "main": "lib/binary-breeder.js",
+  "description": "Breeds the specified number of offspring from two parent strings of binary digits with the possibility of random mutation.",
   "devDependencies": {
     "chai": "^3.2.0",
     "coveralls": "^2.11.4",
