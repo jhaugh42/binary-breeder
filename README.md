@@ -1,6 +1,6 @@
 # binary-breeder
 
-Breeds two strings of binary digits and breeds the requested number of offspring.
+Breeds the specified number of offspring from two parent strings of binary digits with the possibility of random mutation. 
 
 [![npm](https://img.shields.io/npm/v/binary-breeder.svg)](https://www.npmjs.com/package/binary-breeder) [![Coverage Status](https://coveralls.io/repos/jhaugh42/binary-breeder/badge.svg?branch=master&service=github)](https://coveralls.io/github/jhaugh42/binary-breeder?branch=master) [![Build Status](https://travis-ci.org/jhaugh42/binary-breeder.svg?branch=master)](https://travis-ci.org/jhaugh42/binary-breeder)
 
@@ -37,4 +37,14 @@ var parentChromosomes = [
 ];
 
 var offspring = reproduce(parentChromosomes, numOffspring, mutationChance);
+
+/*
+sample output
+
+[ '000010100110110100',
+  '110011001101100101',
+  '110010100111100101',
+  '000011001101110100',
+  '110011001101100101' ]
+*/
 ```
