@@ -2,7 +2,7 @@
   "name": "binary-breeder",
   "repository": "https://github.com/jhaugh42/binary-breeder.git",
   "license": "MIT",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "main": "lib/binary-breeder.js",
   "description": "Breeds the specified number of offspring from two parent strings of binary digits with the possibility of random mutation.",
   "devDependencies": {
@@ -16,9 +16,6 @@
     "test": "mocha",
     "cover": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec",
     "test-travis": "node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec"
-  },
-  "dependencies": {
-    "random-js": "^1.0.4"
   },
   "keywords": [
     "genetic",
