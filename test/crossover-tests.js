@@ -34,7 +34,7 @@ describe('the binary breeder crossover tests', function() {
         var mockRandom = getMockRandom();
         mockRandom.setIntegerResult(crossoverStartIndex);
 
-        mockery.registerMock('random-js', mockRandom);
+        mockery.registerMock('./random-wrapper.js', mockRandom);
 
         var expectedChildrenChromosomes = ['0101', '1110'];
 
@@ -52,7 +52,7 @@ describe('the binary breeder crossover tests', function() {
         var mockRandom = getMockRandom();
         mockRandom.setIntegerResult(crossoverStartIndex);
 
-        mockery.registerMock('random-js', mockRandom);
+        mockery.registerMock('./random-wrapper.js', mockRandom);
 
         var expectedChildrenChromosomes = ['1111', '0100'];
 
@@ -70,17 +70,10 @@ describe('the binary breeder crossover tests', function() {
                 randomMock.integerResult = result;
             },
             integer: function(min, max) {
-                return function(maths) {
-                    return randomMock.integerResult;
-                }
+                return randomMock.integerResult;
             },
             real: function(min, max) {
-                return function(maths) {
-                    return MUTATION_CHANCE;
-                }
-            },
-            engines: {
-                nativeMath: 'whatever'
+                return MUTATION_CHANCE;
             }
         };
         return randomMock;

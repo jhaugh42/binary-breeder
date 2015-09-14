@@ -33,7 +33,7 @@ describe('mutation of chromosomes', function() {
         var mockRandom = getMockRandom();
         mockRandom.setIntegerResult(crossoverStartIndex);
 
-        mockery.registerMock('random-js', mockRandom);
+        mockery.registerMock('./random-wrapper.js', mockRandom);
 
         var reproduce = require('../lib/binary-breeder.js');
 
@@ -51,7 +51,7 @@ describe('mutation of chromosomes', function() {
         var mockRandom = getMockRandom();
         mockRandom.setIntegerResult(crossoverStartIndex);
 
-        mockery.registerMock('random-js', mockRandom);
+        mockery.registerMock('./random-wrapper.js', mockRandom);
 
         var reproduce = require('../lib/binary-breeder.js');
 
@@ -68,17 +68,10 @@ describe('mutation of chromosomes', function() {
                 randomMock.integerResult = result;
             },
             integer: function(min, max) {
-                return function(maths) {
-                    return randomMock.integerResult;
-                }
+                return randomMock.integerResult;
             },
             real: function(min, max) {
-                return function(maths) {
-                    return 0.0;
-                }
-            },
-            engines: {
-                nativeMath: 'whatever'
+                return 0.0;
             }
         };
         return randomMock;
