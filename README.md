@@ -11,8 +11,7 @@ Breeds the specified number of offspring from two parent strings of binary digit
 
 ## Dev Setup
 ```
-npm install -g mocha
-npm install -g istanbul
+npm install
 ```
 
 ## Unit Tests

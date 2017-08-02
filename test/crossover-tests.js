@@ -1,21 +1,17 @@
 'use strict';
+var expect = require('chai').expect;
+var mockery = require('mockery');
+var sinon = require('sinon');
 
 describe('the binary breeder crossover tests', function() {
-    var expect = require('chai').expect;
-    var mockery = require('mockery');
 
     var MUTATION_CHANCE = 0.0;
     var NUM_CHILDREN_TO_PRODUCE = 2;
 
     before(function() {
-        mockery.enable(
-            {
-                useCleanCache: true,
-                warnOnReplace: false,
-                warnOnUnregistered: false
-            }
-        );
-        mockery.resetCache();
+        mockery.enable({
+                useCleanCache: true
+        });
     });
 
     afterEach(function() {
