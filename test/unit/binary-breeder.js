@@ -19,7 +19,86 @@ describe('binary-breeder', function() {
     });
 
     describe('_killRandomChildren', function() {
+        var randomMock;
+        var breeder;
 
+        beforeEach(function () {
+            mockery.enable({
+                useCleanCache: true
+            });
+
+            mockery.registerAllowable('../../lib/binary-breeder.js');
+
+            randomMock = {
+                integer: sinon.stub()
+            };
+            mockery.registerMock('./random-wrapper.js', randomMock);
+
+            breeder = require('../../lib/binary-breeder.js');
+            breeder._crossover = {};
+            breeder._mutate = {};
+            breeder._validateParentChromosomes = {};
+            breeder._getDefaultOptions = {};
+            breeder.breed = {};
+        });
+
+        afterEach(function () {
+            mockery.deregisterAll();
+            mockery.disable();
+        });
+
+        it('should call Random.integer 4 times with 0 and length of new children - 1, ' +
+            'when the number of requested children is 4 and the length of new children is 8', function() {
+            randomMock.integer.returns(0);
+
+            breeder._killRandomChildren([1, 2, 3, 4, 5, 6, 7, 8], 4);
+
+            expect(randomMock.integer.args).to.eql([
+                [0, 7],
+                [0, 6],
+                [0, 5],
+                [0, 4]
+            ]);
+        });
+
+        it('should call Random.integer 5 times with 0 and length of new children - 1, ' +
+            'when the number of requested children is 4 and the length of new children is 9', function() {
+            randomMock.integer.returns(0);
+
+            breeder._killRandomChildren([1, 2, 3, 4, 5, 6, 7, 8, 9], 4);
+
+            expect(randomMock.integer.args).to.eql([
+                [0, 8],
+                [0, 7],
+                [0, 6],
+                [0, 5],
+                [0, 4]
+            ]);
+        });
+
+        it('should remove the child at index 0, when Random.integer returns 0, and only one child needs to be removed', function() {
+            randomMock.integer.returns(0);
+
+            var result = breeder._killRandomChildren([1, 2, 3, 4, 5, 6, 7, 8, 9], 8);
+
+            expect(result).to.eql([2, 3, 4, 5, 6, 7, 8, 9]);
+        });
+
+        it('should remove the child at index 8, when Random.integer returns 8, and only one child needs to be removed', function() {
+            randomMock.integer.returns(8);
+
+            var result = breeder._killRandomChildren([1, 2, 3, 4, 5, 6, 7, 8, 9], 8);
+
+            expect(result).to.eql([1, 2, 3, 4, 5, 6, 7, 8]);
+        });
+
+        it('should remove the child at index 4, when Random.integer returns 4, and only one child needs to be removed', function() {
+            randomMock.integer.returns(4);
+
+            var result = breeder._killRandomChildren([1, 2, 3, 4, 5, 6, 7, 8, 9], 8);
+
+            expect(result).to.eql([1, 2, 3, 4, 6, 7, 8, 9]);
+        });
     });
 
     describe('_mutate', function() {
