@@ -1,7 +1,7 @@
 'use strict';
 describe('validation of binary breeder inputs', function() {
     var expect = require('chai').expect;
-    var breed = require('../lib/binary-breeder.js');
+    var breed = require('../../lib/binary-breeder.js');
 
     var BAD_CHROMOSOMES_NON_STRING = [
         ['0010110', 10001101],
