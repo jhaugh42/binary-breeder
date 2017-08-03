@@ -15,6 +15,95 @@ describe('binary-breeder', function() {
     });
 
     describe('_validateParentChromosomes', function() {
+        var BAD_CHROMOSOMES_NON_STRING = [
+            ['0010110', 10001101],
+            [10001101, '0010110'],
+            [, '11001'],
+            [null, '100100'],
+            [[], '00101001']
+        ];
+
+        var BAD_CHROMOSOMES_NOT_TWO_ELEMENTS = [
+            [],
+            ['0010110'],
+            ['10001101', '0010110', '1010110']
+        ];
+
+        var BAD_CHROMOSOMES_INVALID_CHARACTERS = [
+            ['10043210', '10001101'],
+            ['10001101', '010abc10']
+        ];
+
+        var BAD_INPUT_NON_ARRAYS = [
+            {name: 'integer', data: 12345},
+            {name: 'string of two zeros', data: '00'},
+            {name: 'string of two ones', data: '11'},
+            {name: 'decimal', data: 0.1},
+            {
+                name: 'function', data: function () {
+            }
+            },
+            {name: 'object literal', data: {}},
+            {name: 'null', data: null},
+            {name: 'undefined', data: undefined}
+        ];
+
+        var breeder;
+
+        beforeEach(function () {
+            mockery.enable({
+                useCleanCache: true
+            });
+
+            mockery.registerAllowable('../../lib/binary-breeder.js');
+
+            mockery.registerMock('./random-wrapper.js', {});
+
+            breeder = require('../../lib/binary-breeder.js');
+            breeder._crossover = {};
+            breeder._mutate = {};
+            breeder._killRandomChildren = {};
+            breeder._getDefaultOptions = {};
+            breeder.breed = {};
+        });
+
+        afterEach(function () {
+            mockery.deregisterAll();
+            mockery.disable();
+        });
+
+        BAD_CHROMOSOMES_NOT_TWO_ELEMENTS.forEach(function (parentChromosomes) {
+            it('should throw an Error when the length of the parent chromosome array is ' + parentChromosomes.length, function () {
+                var doIt = breeder._validateParentChromosomes.bind(null, parentChromosomes);
+                expect(doIt).to.throw('Exactly two parent chromosomes should be specified.')
+            });
+        });
+
+        BAD_CHROMOSOMES_INVALID_CHARACTERS.forEach(function (parentChromosomes, index) {
+            it('should throw an Error when the element at index ' + index + ' contains characters not 0 or 1', function () {
+                var doIt = breeder._validateParentChromosomes.bind(null, parentChromosomes);
+                expect(doIt).to.throw('Both chromosomes may only contain only 0s and 1s.')
+            });
+        });
+
+        BAD_CHROMOSOMES_NON_STRING.forEach(function (parentChromosomes, index) {
+            it('should throw an Error when one element is not a string, with parent chromosomes specified as ' + JSON.stringify(parentChromosomes), function () {
+                var doIt = breeder._validateParentChromosomes.bind(null, parentChromosomes);
+                expect(doIt).to.throw('Both parent chromosomes must be strings.')
+            });
+        });
+
+        it('should throw an Error when the length of the parent chromosomes are not equal', function () {
+            var doIt = breeder._validateParentChromosomes.bind(null, ['0000', '00000']);
+            expect(doIt).to.throw('Both chromosomes must be the same length.')
+        });
+
+        BAD_INPUT_NON_ARRAYS.forEach(function (badInput) {
+            it('should throw an Error data type of the input chromosome is ' + badInput.name, function () {
+                var doIt = breeder._validateParentChromosomes.bind(null, badInput.data);
+                expect(doIt).to.throw('Parent chromosomes must be provided in an array.')
+            });
+        });
 
     });
 
