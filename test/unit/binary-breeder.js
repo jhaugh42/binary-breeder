@@ -7,11 +7,223 @@ var sinon = require('sinon');
 describe('binary-breeder', function() {
 
     describe('breed', function() {
+        var breeder;
 
+        beforeEach(function () {
+            mockery.enable({
+                useCleanCache: true
+            });
+
+            mockery.registerAllowable('../../lib/binary-breeder.js');
+
+            mockery.registerMock('./random-wrapper.js', {});
+
+            breeder = require('../../lib/binary-breeder.js');
+            breeder._crossover = sinon.stub();
+            breeder._mutate = sinon.stub();
+            breeder._killRandomChildren = sinon.stub();
+            breeder._validateParentChromosomes = sinon.stub();
+            breeder._getDefaultOptions = sinon.stub();
+        });
+
+        afterEach(function () {
+            mockery.deregisterAll();
+            mockery.disable();
+        });
+
+        it('should call breeder._getDefaultOptions once, with the input options', function() {
+            breeder._getDefaultOptions.returns({});
+
+            breeder.breed(['001001', '110110'], {options: 'optional'});
+
+            expect(breeder._getDefaultOptions.args).to.eql([
+                [{options: 'optional'}]
+            ]);
+        });
+
+        it('should call breeder._validateParentChromosomes once, with the parent chromosomes input', function() {
+            breeder._getDefaultOptions.returns({});
+
+            breeder.breed(['001001', '110110']);
+
+            expect(breeder._validateParentChromosomes.args).to.eql([
+                [['001001', '110110']]
+            ]);
+        });
+
+        it('should call breeder._crossover options.numOffspring times, with the parent chromosomes', function() {
+            breeder._getDefaultOptions.returns({
+                numOffspring: 1
+            });
+            breeder._crossover.returns([]);
+
+            breeder.breed(['001001', '110110']);
+
+            expect(breeder._crossover.args).to.eql([
+                ['001001', '110110']
+            ]);
+        });
+
+        it('should call breeder._crossover options.numOffspring times, with the parent chromosomes when the number of offspring is 2', function() {
+            breeder._getDefaultOptions.returns({
+                numOffspring: 2
+            });
+            breeder._crossover.returns([]);
+
+            breeder.breed(['001001', '110110']);
+
+            expect(breeder._crossover.args).to.eql([
+                ['001001', '110110'],
+                ['001001', '110110']
+            ]);
+        });
+
+        it('should call breeder._mutate once for each of the offspring returned by breeder._crossover, using the mutationChance option', function() {
+            breeder._getDefaultOptions.returns({
+                numOffspring: 1,
+                mutationChance: 0.012
+            });
+            breeder._crossover.returns(['000000']);
+
+            breeder.breed(['001001', '110110']);
+
+            expect(breeder._mutate.args).to.eql([
+                ['000000', 0.012]
+            ]);
+        });
+
+        it('should call breeder._killRandomChildren once, with all the new children as returned from mutate and the numOffspring option', function() {
+            breeder._getDefaultOptions.returns({
+                numOffspring: 1,
+                mutationChance: 0.012
+            });
+            breeder._crossover.returns(['000000']);
+            breeder._mutate.returns('000100');
+
+            breeder.breed(['001001', '110110']);
+
+            expect(breeder._killRandomChildren.args).to.eql([
+                [['000100'], 1]
+            ]);
+        });
+
+        it('should call breeder._killRandomChildren twice, with all the new children as returned from mutate and ' +
+            'the numOffspring option, when the number of offspring is 2', function() {
+            breeder._getDefaultOptions.returns({
+                numOffspring: 2,
+                mutationChance: 0.012
+            });
+            breeder._crossover.returns(['000000']);
+            breeder._mutate.onFirstCall().returns('000100');
+            breeder._mutate.onSecondCall().returns('100000');
+
+            breeder.breed(['001001', '110110']);
+
+            expect(breeder._killRandomChildren.args).to.eql([
+                [['000100', '100000'], 2]
+            ]);
+        });
+
+        it('should return the result of breeder._killRandomChildren', function() {
+            breeder._getDefaultOptions.returns({
+                numOffspring: 2,
+                mutationChance: 0.012
+            });
+            breeder._crossover.returns(['000000']);
+            breeder._mutate.returns('000100');
+            breeder._killRandomChildren.returns('_killRandomChildren');
+
+            var result = breeder.breed(['001001', '110110']);
+
+            expect(result).to.eql('_killRandomChildren');
+        });
     });
 
     describe('_getDefaultOptions', function() {
+        var breeder;
 
+        beforeEach(function () {
+            mockery.enable({
+                useCleanCache: true
+            });
+
+            mockery.registerAllowable('../../lib/binary-breeder.js');
+
+            mockery.registerMock('./random-wrapper.js', {});
+
+            breeder = require('../../lib/binary-breeder.js');
+            breeder._crossover = {};
+            breeder._mutate = {};
+            breeder._killRandomChildren = {};
+            breeder._validateParentChromosomes = {};
+            breeder.breed = {};
+        });
+
+        afterEach(function () {
+            mockery.deregisterAll();
+            mockery.disable();
+        });
+
+        it('should return an object with mutation chance of 0.01 and numOffspring of 10 when input is an empty object', function() {
+            var result = breeder._getDefaultOptions({});
+
+            expect(result).to.eql({
+                mutationChance: 0.01,
+                numOffspring: 10
+            });
+        });
+
+        it('should return an object with mutation chance of 0.01 and numOffspring of 10 when input is undefined', function() {
+            var result = breeder._getDefaultOptions();
+
+            expect(result).to.eql({
+                mutationChance: 0.01,
+                numOffspring: 10
+            });
+        });
+
+        it('should provide a default for numOffspring when it is not provided and not change mutationChance when it is provided', function() {
+            var result = breeder._getDefaultOptions({numOffspring: 4});
+
+            expect(result).to.eql({
+                mutationChance: 0.01,
+                numOffspring: 4
+            });
+        });
+
+        it('should provide a default for mutationChance when it is not provided and not change numOffspring when it is provided', function() {
+            var result = breeder._getDefaultOptions({mutationChance: 0.5});
+
+            expect(result).to.eql({
+                mutationChance: 0.5,
+                numOffspring: 10
+            });
+        });
+
+        it('should not adjust any of the options that are specified', function() {
+            var result = breeder._getDefaultOptions({
+                mutationChance: 0.5,
+                numOffspring: 14
+            });
+
+            expect(result).to.eql({
+                mutationChance: 0.5,
+                numOffspring: 14
+            });
+        });
+
+        it('should not return any properties that are not valid options', function() {
+            var result = breeder._getDefaultOptions({
+                mutationChance: 0.5,
+                numOffspring: 14,
+                notAValidOption: 'i should be removed'
+            });
+
+            expect(result).to.eql({
+                mutationChance: 0.5,
+                numOffspring: 14
+            });
+        });
     });
 
     describe('_validateParentChromosomes', function() {
@@ -104,6 +316,12 @@ describe('binary-breeder', function() {
                 expect(doIt).to.throw('Parent chromosomes must be provided in an array.')
             });
         });
+
+        it('should not throw an Error when the chromosomes are valid', function () {
+            var doIt = breeder._validateParentChromosomes.bind(null, ['0000', '1111']);
+            expect(doIt).to.not.throw()
+        });
+
 
     });
 

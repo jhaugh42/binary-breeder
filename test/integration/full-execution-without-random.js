@@ -1,0 +1,56 @@
+'use strict';
+
+var expect = require('chai').expect;
+var mockery = require('mockery');
+var sinon = require('sinon');
+
+describe('binary-breeder full execution', function() {
+    var breeder;
+    var randomMock;
+
+    beforeEach(function () {
+        mockery.enable({
+            useCleanCache: true,
+            warnOnUnregistered: false
+        });
+
+        randomMock = {
+            real: sinon.stub(),
+            integer: sinon.stub()
+        };
+        mockery.registerMock('./random-wrapper.js', randomMock);
+
+        breeder = require('../../lib/binary-breeder.js');
+    });
+
+    afterEach(function () {
+        mockery.deregisterAll();
+        mockery.disable();
+    });
+
+    it('should produce the number of offspring specified in the options', function() {
+        var parentChromosomes = ['001001001110111001110', '001111111000111001110'];
+
+        //always mutate
+        randomMock.real.returns(1);
+
+        //always crossover bits up to (but not including) index 2
+        //always kill child at index 2
+        randomMock.integer.returns(2);
+
+        var result = breeder.breed(parentChromosomes);
+
+        expect(result).to.eql([
+            '001111111000111001110',
+            '001001001110111001110',
+            '001111111000111001110',
+            '001001001110111001110',
+            '001111111000111001110',
+            '001001001110111001110',
+            '001111111000111001110',
+            '001001001110111001110',
+            '001111111000111001110',
+            '001001001110111001110'
+        ]);
+    });
+});
