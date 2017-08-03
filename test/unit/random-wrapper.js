@@ -1,15 +1,15 @@
 'use strict';
 
-var expect = require('chai').expect;
-var mockery = require('mockery');
-var sinon = require('sinon');
+const expect = require('chai').expect;
+const mockery = require('mockery');
+const sinon = require('sinon');
 
-describe('random-wrapper', function() {
+describe('random-wrapper', () => {
 
-    describe('real', function() {
-        var randomWrapper;
+    describe('real', () => {
+        let randomWrapper;
 
-        beforeEach(function () {
+        beforeEach(() => {
             mockery.enable({
                 useCleanCache: true
             });
@@ -22,31 +22,31 @@ describe('random-wrapper', function() {
 
         });
 
-        afterEach(function () {
+        afterEach(() => {
             Math.random.restore();
             mockery.deregisterAll();
             mockery.disable();
         });
 
-        it('should call Math.random once, without parameters', function() {
+        it('should call Math.random once, without parameters', () => {
             randomWrapper.real();
 
             expect(Math.random.args).to.eql([[]]);
         });
 
-        it('should return the result of Math.random', function() {
+        it('should return the result of Math.random', () => {
             Math.random.returns('result of random');
 
-            var result = randomWrapper.real();
+            const result = randomWrapper.real();
 
             expect(result).to.eql('result of random');
         });
     });
 
-    describe('integer', function() {
-        var randomWrapper;
+    describe('integer', () => {
+        let randomWrapper;
 
-        beforeEach(function () {
+        beforeEach(() => {
             mockery.enable({
                 useCleanCache: true
             });
@@ -59,20 +59,20 @@ describe('random-wrapper', function() {
             randomWrapper.real = {};
         });
 
-        afterEach(function () {
+        afterEach(() => {
             Math.random.restore();
             Math.floor.restore();
             mockery.deregisterAll();
             mockery.disable();
         });
 
-        it('should call Math.random once, without parameters', function() {
+        it('should call Math.random once, without parameters', () => {
             randomWrapper.integer();
 
             expect(Math.random.args).to.eql([[]]);
         });
 
-        it('should call Math.floor once, with the result of Math.random * (max - min + 1) when min=1 and max=1', function() {
+        it('should call Math.floor once, with the result of Math.random * (max - min + 1) when min=1 and max=1', () => {
             Math.random.returns(1);
 
             randomWrapper.integer(1, 1);
@@ -83,7 +83,7 @@ describe('random-wrapper', function() {
 
         });
 
-        it('should call Math.floor once, with the result of Math.random * (max - min + 1) when min=6 and max=20', function() {
+        it('should call Math.floor once, with the result of Math.random * (max - min + 1) when min=6 and max=20', () => {
             Math.random.returns(1);
 
             randomWrapper.integer(6, 20);
@@ -93,10 +93,10 @@ describe('random-wrapper', function() {
             ]);
         });
 
-        it('should return the result of Math.floor + min when min=3', function() {
+        it('should return the result of Math.floor + min when min=3', () => {
             Math.floor.returns(94);
 
-            var result = randomWrapper.integer(3, 49);
+            const result = randomWrapper.integer(3, 49);
 
             expect(result).to.equal(94 + 3);
         });

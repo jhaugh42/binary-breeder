@@ -1,15 +1,15 @@
 'use strict';
 
-var expect = require('chai').expect;
-var mockery = require('mockery');
-var sinon = require('sinon');
+const expect = require('chai').expect;
+const mockery = require('mockery');
+const sinon = require('sinon');
 
-describe('binary-breeder', function() {
+describe('binary-breeder', () => {
 
-    describe('breed', function() {
-        var breeder;
+    describe('breed', () => {
+        let breeder;
 
-        beforeEach(function () {
+        beforeEach(() => {
             mockery.enable({
                 useCleanCache: true
             });
@@ -26,12 +26,12 @@ describe('binary-breeder', function() {
             breeder._getDefaultOptions = sinon.stub();
         });
 
-        afterEach(function () {
+        afterEach(() => {
             mockery.deregisterAll();
             mockery.disable();
         });
 
-        it('should call breeder._getDefaultOptions once, with the input options', function() {
+        it('should call breeder._getDefaultOptions once, with the input options', () => {
             breeder._getDefaultOptions.returns({});
 
             breeder.breed(['001001', '110110'], {options: 'optional'});
@@ -41,7 +41,7 @@ describe('binary-breeder', function() {
             ]);
         });
 
-        it('should call breeder._validateParentChromosomes once, with the parent chromosomes input', function() {
+        it('should call breeder._validateParentChromosomes once, with the parent chromosomes input', () => {
             breeder._getDefaultOptions.returns({});
 
             breeder.breed(['001001', '110110']);
@@ -51,7 +51,7 @@ describe('binary-breeder', function() {
             ]);
         });
 
-        it('should call breeder._crossover options.numOffspring times, with the parent chromosomes', function() {
+        it('should call breeder._crossover options.numOffspring times, with the parent chromosomes', () => {
             breeder._getDefaultOptions.returns({
                 numOffspring: 1
             });
@@ -64,7 +64,7 @@ describe('binary-breeder', function() {
             ]);
         });
 
-        it('should call breeder._crossover options.numOffspring times, with the parent chromosomes when the number of offspring is 2', function() {
+        it('should call breeder._crossover options.numOffspring times, with the parent chromosomes when the number of offspring is 2', () => {
             breeder._getDefaultOptions.returns({
                 numOffspring: 2
             });
@@ -78,7 +78,7 @@ describe('binary-breeder', function() {
             ]);
         });
 
-        it('should call breeder._mutate once for each of the offspring returned by breeder._crossover, using the mutationChance option', function() {
+        it('should call breeder._mutate once for each of the offspring returned by breeder._crossover, using the mutationChance option', () => {
             breeder._getDefaultOptions.returns({
                 numOffspring: 1,
                 mutationChance: 0.012
@@ -92,7 +92,7 @@ describe('binary-breeder', function() {
             ]);
         });
 
-        it('should call breeder._killRandomChildren once, with all the new children as returned from mutate and the numOffspring option', function() {
+        it('should call breeder._killRandomChildren once, with all the new children as returned from mutate and the numOffspring option', () => {
             breeder._getDefaultOptions.returns({
                 numOffspring: 1,
                 mutationChance: 0.012
@@ -108,7 +108,7 @@ describe('binary-breeder', function() {
         });
 
         it('should call breeder._killRandomChildren twice, with all the new children as returned from mutate and ' +
-            'the numOffspring option, when the number of offspring is 2', function() {
+            'the numOffspring option, when the number of offspring is 2', () => {
             breeder._getDefaultOptions.returns({
                 numOffspring: 2,
                 mutationChance: 0.012
@@ -124,7 +124,7 @@ describe('binary-breeder', function() {
             ]);
         });
 
-        it('should return the result of breeder._killRandomChildren', function() {
+        it('should return the result of breeder._killRandomChildren', () => {
             breeder._getDefaultOptions.returns({
                 numOffspring: 2,
                 mutationChance: 0.012
@@ -133,16 +133,16 @@ describe('binary-breeder', function() {
             breeder._mutate.returns('000100');
             breeder._killRandomChildren.returns('_killRandomChildren');
 
-            var result = breeder.breed(['001001', '110110']);
+            const result = breeder.breed(['001001', '110110']);
 
             expect(result).to.eql('_killRandomChildren');
         });
     });
 
-    describe('_getDefaultOptions', function() {
-        var breeder;
+    describe('_getDefaultOptions', () => {
+        let breeder;
 
-        beforeEach(function () {
+        beforeEach(() => {
             mockery.enable({
                 useCleanCache: true
             });
@@ -159,13 +159,13 @@ describe('binary-breeder', function() {
             breeder.breed = {};
         });
 
-        afterEach(function () {
+        afterEach(() => {
             mockery.deregisterAll();
             mockery.disable();
         });
 
-        it('should return an object with mutation chance of 0.01 and numOffspring of 10 when input is an empty object', function() {
-            var result = breeder._getDefaultOptions({});
+        it('should return an object with mutation chance of 0.01 and numOffspring of 10 when input is an empty object', () => {
+            const result = breeder._getDefaultOptions({});
 
             expect(result).to.eql({
                 mutationChance: 0.01,
@@ -173,8 +173,8 @@ describe('binary-breeder', function() {
             });
         });
 
-        it('should return an object with mutation chance of 0.01 and numOffspring of 10 when input is undefined', function() {
-            var result = breeder._getDefaultOptions();
+        it('should return an object with mutation chance of 0.01 and numOffspring of 10 when input is undefined', () => {
+            const result = breeder._getDefaultOptions();
 
             expect(result).to.eql({
                 mutationChance: 0.01,
@@ -182,8 +182,8 @@ describe('binary-breeder', function() {
             });
         });
 
-        it('should provide a default for numOffspring when it is not provided and not change mutationChance when it is provided', function() {
-            var result = breeder._getDefaultOptions({numOffspring: 4});
+        it('should provide a default for numOffspring when it is not provided and not change mutationChance when it is provided', () => {
+            const result = breeder._getDefaultOptions({numOffspring: 4});
 
             expect(result).to.eql({
                 mutationChance: 0.01,
@@ -191,8 +191,8 @@ describe('binary-breeder', function() {
             });
         });
 
-        it('should provide a default for mutationChance when it is not provided and not change numOffspring when it is provided', function() {
-            var result = breeder._getDefaultOptions({mutationChance: 0.5});
+        it('should provide a default for mutationChance when it is not provided and not change numOffspring when it is provided', () => {
+            const result = breeder._getDefaultOptions({mutationChance: 0.5});
 
             expect(result).to.eql({
                 mutationChance: 0.5,
@@ -200,8 +200,8 @@ describe('binary-breeder', function() {
             });
         });
 
-        it('should not adjust any of the options that are specified', function() {
-            var result = breeder._getDefaultOptions({
+        it('should not adjust any of the options that are specified', () => {
+            const result = breeder._getDefaultOptions({
                 mutationChance: 0.5,
                 numOffspring: 14
             });
@@ -212,8 +212,8 @@ describe('binary-breeder', function() {
             });
         });
 
-        it('should not return any properties that are not valid options', function() {
-            var result = breeder._getDefaultOptions({
+        it('should not return any properties that are not valid options', () => {
+            const result = breeder._getDefaultOptions({
                 mutationChance: 0.5,
                 numOffspring: 14,
                 notAValidOption: 'i should be removed'
@@ -226,8 +226,8 @@ describe('binary-breeder', function() {
         });
     });
 
-    describe('_validateParentChromosomes', function() {
-        var BAD_CHROMOSOMES_NON_STRING = [
+    describe('_validateParentChromosomes', () => {
+        const BAD_CHROMOSOMES_NON_STRING = [
             ['0010110', 10001101],
             [10001101, '0010110'],
             [, '11001'],
@@ -235,34 +235,34 @@ describe('binary-breeder', function() {
             [[], '00101001']
         ];
 
-        var BAD_CHROMOSOMES_NOT_TWO_ELEMENTS = [
+        const BAD_CHROMOSOMES_NOT_TWO_ELEMENTS = [
             [],
             ['0010110'],
             ['10001101', '0010110', '1010110']
         ];
 
-        var BAD_CHROMOSOMES_INVALID_CHARACTERS = [
+        const BAD_CHROMOSOMES_INVALID_CHARACTERS = [
             ['10043210', '10001101'],
             ['10001101', '010abc10']
         ];
 
-        var BAD_INPUT_NON_ARRAYS = [
+        const BAD_INPUT_NON_ARRAYS = [
             {name: 'integer', data: 12345},
             {name: 'string of two zeros', data: '00'},
             {name: 'string of two ones', data: '11'},
             {name: 'decimal', data: 0.1},
             {
-                name: 'function', data: function () {
-            }
+                name: 'function', data() {
+                }
             },
             {name: 'object literal', data: {}},
             {name: 'null', data: null},
             {name: 'undefined', data: undefined}
         ];
 
-        var breeder;
+        let breeder;
 
-        beforeEach(function () {
+        beforeEach(() => {
             mockery.enable({
                 useCleanCache: true
             });
@@ -279,57 +279,57 @@ describe('binary-breeder', function() {
             breeder.breed = {};
         });
 
-        afterEach(function () {
+        afterEach(() => {
             mockery.deregisterAll();
             mockery.disable();
         });
 
-        BAD_CHROMOSOMES_NOT_TWO_ELEMENTS.forEach(function (parentChromosomes) {
-            it('should throw an Error when the length of the parent chromosome array is ' + parentChromosomes.length, function () {
-                var doIt = breeder._validateParentChromosomes.bind(null, parentChromosomes);
-                expect(doIt).to.throw('Exactly two parent chromosomes should be specified.')
+        BAD_CHROMOSOMES_NOT_TWO_ELEMENTS.forEach(parentChromosomes => {
+            it(`should throw an Error when the length of the parent chromosome array is ${parentChromosomes.length}`, () => {
+                const doIt = breeder._validateParentChromosomes.bind(null, parentChromosomes);
+                expect(doIt).to.throw('Exactly two parent chromosomes should be specified.');
             });
         });
 
-        BAD_CHROMOSOMES_INVALID_CHARACTERS.forEach(function (parentChromosomes, index) {
-            it('should throw an Error when the element at index ' + index + ' contains characters not 0 or 1', function () {
-                var doIt = breeder._validateParentChromosomes.bind(null, parentChromosomes);
-                expect(doIt).to.throw('Both chromosomes may only contain only 0s and 1s.')
+        BAD_CHROMOSOMES_INVALID_CHARACTERS.forEach((parentChromosomes, index) => {
+            it(`should throw an Error when the element at index ${index} contains characters not 0 or 1`, () => {
+                const doIt = breeder._validateParentChromosomes.bind(null, parentChromosomes);
+                expect(doIt).to.throw('Both chromosomes may only contain only 0s and 1s.');
             });
         });
 
-        BAD_CHROMOSOMES_NON_STRING.forEach(function (parentChromosomes, index) {
-            it('should throw an Error when one element is not a string, with parent chromosomes specified as ' + JSON.stringify(parentChromosomes), function () {
-                var doIt = breeder._validateParentChromosomes.bind(null, parentChromosomes);
-                expect(doIt).to.throw('Both parent chromosomes must be strings.')
+        BAD_CHROMOSOMES_NON_STRING.forEach(parentChromosomes => {
+            it(`should throw an Error when one element is not a string, with parent chromosomes specified as ${JSON.stringify(parentChromosomes)}`, () => {
+                const doIt = breeder._validateParentChromosomes.bind(null, parentChromosomes);
+                expect(doIt).to.throw('Both parent chromosomes must be strings.');
             });
         });
 
-        it('should throw an Error when the length of the parent chromosomes are not equal', function () {
-            var doIt = breeder._validateParentChromosomes.bind(null, ['0000', '00000']);
-            expect(doIt).to.throw('Both chromosomes must be the same length.')
+        it('should throw an Error when the length of the parent chromosomes are not equal', () => {
+            const doIt = breeder._validateParentChromosomes.bind(null, ['0000', '00000']);
+            expect(doIt).to.throw('Both chromosomes must be the same length.');
         });
 
-        BAD_INPUT_NON_ARRAYS.forEach(function (badInput) {
-            it('should throw an Error data type of the input chromosome is ' + badInput.name, function () {
-                var doIt = breeder._validateParentChromosomes.bind(null, badInput.data);
-                expect(doIt).to.throw('Parent chromosomes must be provided in an array.')
+        BAD_INPUT_NON_ARRAYS.forEach(badInput => {
+            it(`should throw an Error data type of the input chromosome is ${badInput.name}`, () => {
+                const doIt = breeder._validateParentChromosomes.bind(null, badInput.data);
+                expect(doIt).to.throw('Parent chromosomes must be provided in an array.');
             });
         });
 
-        it('should not throw an Error when the chromosomes are valid', function () {
-            var doIt = breeder._validateParentChromosomes.bind(null, ['0000', '1111']);
-            expect(doIt).to.not.throw()
+        it('should not throw an Error when the chromosomes are valid', () => {
+            const doIt = breeder._validateParentChromosomes.bind(null, ['0000', '1111']);
+            expect(doIt).to.not.throw();
         });
 
 
     });
 
-    describe('_killRandomChildren', function() {
-        var randomMock;
-        var breeder;
+    describe('_killRandomChildren', () => {
+        let randomMock;
+        let breeder;
 
-        beforeEach(function () {
+        beforeEach(() => {
             mockery.enable({
                 useCleanCache: true
             });
@@ -349,13 +349,13 @@ describe('binary-breeder', function() {
             breeder.breed = {};
         });
 
-        afterEach(function () {
+        afterEach(() => {
             mockery.deregisterAll();
             mockery.disable();
         });
 
         it('should call Random.integer 4 times with 0 and length of new children - 1, ' +
-            'when the number of requested children is 4 and the length of new children is 8', function() {
+            'when the number of requested children is 4 and the length of new children is 8', () => {
             randomMock.integer.returns(0);
 
             breeder._killRandomChildren([1, 2, 3, 4, 5, 6, 7, 8], 4);
@@ -369,7 +369,7 @@ describe('binary-breeder', function() {
         });
 
         it('should call Random.integer 5 times with 0 and length of new children - 1, ' +
-            'when the number of requested children is 4 and the length of new children is 9', function() {
+            'when the number of requested children is 4 and the length of new children is 9', () => {
             randomMock.integer.returns(0);
 
             breeder._killRandomChildren([1, 2, 3, 4, 5, 6, 7, 8, 9], 4);
@@ -383,36 +383,36 @@ describe('binary-breeder', function() {
             ]);
         });
 
-        it('should remove the child at index 0, when Random.integer returns 0, and only one child needs to be removed', function() {
+        it('should remove the child at index 0, when Random.integer returns 0, and only one child needs to be removed', () => {
             randomMock.integer.returns(0);
 
-            var result = breeder._killRandomChildren([1, 2, 3, 4, 5, 6, 7, 8, 9], 8);
+            const result = breeder._killRandomChildren([1, 2, 3, 4, 5, 6, 7, 8, 9], 8);
 
             expect(result).to.eql([2, 3, 4, 5, 6, 7, 8, 9]);
         });
 
-        it('should remove the child at index 8, when Random.integer returns 8, and only one child needs to be removed', function() {
+        it('should remove the child at index 8, when Random.integer returns 8, and only one child needs to be removed', () => {
             randomMock.integer.returns(8);
 
-            var result = breeder._killRandomChildren([1, 2, 3, 4, 5, 6, 7, 8, 9], 8);
+            const result = breeder._killRandomChildren([1, 2, 3, 4, 5, 6, 7, 8, 9], 8);
 
             expect(result).to.eql([1, 2, 3, 4, 5, 6, 7, 8]);
         });
 
-        it('should remove the child at index 4, when Random.integer returns 4, and only one child needs to be removed', function() {
+        it('should remove the child at index 4, when Random.integer returns 4, and only one child needs to be removed', () => {
             randomMock.integer.returns(4);
 
-            var result = breeder._killRandomChildren([1, 2, 3, 4, 5, 6, 7, 8, 9], 8);
+            const result = breeder._killRandomChildren([1, 2, 3, 4, 5, 6, 7, 8, 9], 8);
 
             expect(result).to.eql([1, 2, 3, 4, 6, 7, 8, 9]);
         });
     });
 
-    describe('_mutate', function() {
-        var randomMock;
-        var breeder;
+    describe('_mutate', () => {
+        let randomMock;
+        let breeder;
 
-        beforeEach(function () {
+        beforeEach(() => {
             mockery.enable({
                 useCleanCache: true
             });
@@ -432,36 +432,36 @@ describe('binary-breeder', function() {
             breeder.breed = {};
         });
 
-        afterEach(function () {
+        afterEach(() => {
             mockery.deregisterAll();
             mockery.disable();
         });
 
-        it('should return a chromosome with all bits mutated from 0 to 1 when Random.real returns a number less than the mutation chance', function() {
+        it('should return a chromosome with all bits mutated from 0 to 1 when Random.real returns a number less than the mutation chance', () => {
             randomMock.real.returns(0.5);
 
-            var mutatedChromosome = breeder._mutate('000000', 1);
+            const mutatedChromosome = breeder._mutate('000000', 1);
 
             expect(mutatedChromosome).to.equal('111111');
         });
 
-        it('should return a chromosome with all bits mutated from 1 to 0 when Random.real returns a number less than the mutation chance', function() {
+        it('should return a chromosome with all bits mutated from 1 to 0 when Random.real returns a number less than the mutation chance', () => {
             randomMock.real.returns(0.5);
 
-            var mutatedChromosome = breeder._mutate('111111', 1);
+            const mutatedChromosome = breeder._mutate('111111', 1);
 
             expect(mutatedChromosome).to.equal('000000');
         });
 
-        it('should not mutate any bits when Random.real returns a number greater than the mutation chance', function() {
+        it('should not mutate any bits when Random.real returns a number greater than the mutation chance', () => {
             randomMock.real.returns(1.0);
 
-            var mutatedChromosome = breeder._mutate('000000', 0.2);
+            const mutatedChromosome = breeder._mutate('000000', 0.2);
 
             expect(mutatedChromosome).to.equal('000000');
         });
 
-        it('should call Random.real once for each bit in the chromosome, with min of 0 and max of 0.999999', function() {
+        it('should call Random.real once for each bit in the chromosome, with min of 0 and max of 0.999999', () => {
             breeder._mutate('000000', 0.2);
 
             expect(randomMock.real.args).to.eql([
@@ -476,11 +476,11 @@ describe('binary-breeder', function() {
 
     });
 
-    describe('_crossover', function() {
-        var randomMock;
-        var breeder;
+    describe('_crossover', () => {
+        let randomMock;
+        let breeder;
 
-        beforeEach(function () {
+        beforeEach(() => {
             mockery.enable({
                 useCleanCache: true
             });
@@ -500,12 +500,12 @@ describe('binary-breeder', function() {
             breeder.breed = {};
         });
 
-        afterEach(function () {
+        afterEach(() => {
             mockery.deregisterAll();
             mockery.disable();
         });
 
-        it('should call Random.integer once, with 1 and (chromosome1.length -1)', function() {
+        it('should call Random.integer once, with 1 and (chromosome1.length -1)', () => {
             breeder._crossover('0000', '1111');
 
             expect(randomMock.integer.args).to.eql([
@@ -513,34 +513,34 @@ describe('binary-breeder', function() {
             ]);
         });
 
-        it('should return two chromosomes with only the last bit swapped when the crossover starting point is 3 and the chromosome length is 4', function () {
+        it('should return two chromosomes with only the last bit swapped when the crossover starting point is 3 and the chromosome length is 4', () => {
             randomMock.integer.returns(3);
 
-            var offspring = breeder._crossover('0000', '1111');
+            const offspring = breeder._crossover('0000', '1111');
 
             expect(offspring).to.eql(['0001', '1110']);
         });
 
-        it('should return two chromosomes with the last two bits swapped when the crossover starting point is 2 and the chromosome length is 4', function () {
+        it('should return two chromosomes with the last two bits swapped when the crossover starting point is 2 and the chromosome length is 4', () => {
             randomMock.integer.returns(2);
 
-            var offspring = breeder._crossover('0000', '1111');
+            const offspring = breeder._crossover('0000', '1111');
 
             expect(offspring).to.eql(['0011', '1100']);
         });
 
-        it('should return two chromosomes with the last three bits swapped when the crossover starting point is 1 and the chromosome length is 4', function () {
+        it('should return two chromosomes with the last three bits swapped when the crossover starting point is 1 and the chromosome length is 4', () => {
             randomMock.integer.returns(1);
 
-            var offspring = breeder._crossover('0000', '1111');
+            const offspring = breeder._crossover('0000', '1111');
 
             expect(offspring).to.eql(['0111', '1000']);
         });
 
-        it('should return two chromosomes with all bits swapped when the crossover starting point is 0 and the chromosome length is 4', function () {
+        it('should return two chromosomes with all bits swapped when the crossover starting point is 0 and the chromosome length is 4', () => {
             randomMock.integer.returns(0);
 
-            var offspring = breeder._crossover('0000', '1111');
+            const offspring = breeder._crossover('0000', '1111');
 
             expect(offspring).to.eql(['1111', '0000']);
         });

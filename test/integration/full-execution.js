@@ -1,12 +1,12 @@
 'use strict';
 
-var expect = require('chai').expect;
-var mockery = require('mockery');
+const expect = require('chai').expect;
+const mockery = require('mockery');
 
-describe('binary-breeder full execution', function() {
-    var breeder;
+describe('binary-breeder full execution', () => {
+    let breeder;
 
-    beforeEach(function () {
+    beforeEach(() => {
         mockery.enable({
             useCleanCache: true,
             warnOnUnregistered: false
@@ -15,27 +15,27 @@ describe('binary-breeder full execution', function() {
         breeder = require('../../lib/binary-breeder.js');
     });
 
-    afterEach(function () {
+    afterEach(() => {
         mockery.deregisterAll();
         mockery.disable();
     });
 
-    it('should produce the number of offspring specified in the options', function() {
-        var parentChromosomes = ['001001001110111001110', '001111111000111001110'];
-        var options = {
+    it('should produce the number of offspring specified in the options', () => {
+        const parentChromosomes = ['001001001110111001110', '001111111000111001110'];
+        const options = {
             numOffspring: 8
         };
 
-        var result = breeder.breed(parentChromosomes, options);
+        const result = breeder.breed(parentChromosomes, options);
 
         expect(result.length).to.eql(8);
     });
 
-    it('should produce 10 offspring if options.numOffspring is not specified', function() {
-        var parentChromosomes = ['001001001110111001110', '001111111000111001110'];
-        var options = {};
+    it('should produce 10 offspring if options.numOffspring is not specified', () => {
+        const parentChromosomes = ['001001001110111001110', '001111111000111001110'];
+        const options = {};
 
-        var result = breeder.breed(parentChromosomes, options);
+        const result = breeder.breed(parentChromosomes, options);
 
         expect(result.length).to.eql(10);
     });

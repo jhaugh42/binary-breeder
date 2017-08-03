@@ -1,14 +1,14 @@
 'use strict';
 
-var expect = require('chai').expect;
-var mockery = require('mockery');
-var sinon = require('sinon');
+const expect = require('chai').expect;
+const mockery = require('mockery');
+const sinon = require('sinon');
 
-describe('binary-breeder full execution', function() {
-    var breeder;
-    var randomMock;
+describe('binary-breeder full execution', () => {
+    let breeder;
+    let randomMock;
 
-    beforeEach(function () {
+    beforeEach(() => {
         mockery.enable({
             useCleanCache: true,
             warnOnUnregistered: false
@@ -23,22 +23,22 @@ describe('binary-breeder full execution', function() {
         breeder = require('../../lib/binary-breeder.js');
     });
 
-    afterEach(function () {
+    afterEach(() => {
         mockery.deregisterAll();
         mockery.disable();
     });
 
-    it('should produce the number of offspring specified in the options', function() {
-        var parentChromosomes = ['001001001110111001110', '001111111000111001110'];
+    it('should produce the number of offspring specified in the options', () => {
+        const parentChromosomes = ['001001001110111001110', '001111111000111001110'];
 
-        //always mutate
+        // always mutate
         randomMock.real.returns(1);
 
-        //always crossover bits up to (but not including) index 2
-        //always kill child at index 2
+        // always crossover bits up to (but not including) index 2
+        // always kill child at index 2
         randomMock.integer.returns(2);
 
-        var result = breeder.breed(parentChromosomes);
+        const result = breeder.breed(parentChromosomes);
 
         expect(result).to.eql([
             '001111111000111001110',
