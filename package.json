@@ -18,7 +18,9 @@
     "sinon": "^1.17.7"
   },
   "scripts": {
-    "test": "mocha ./test --recursive",
+    "test": "npm run test-unit && npm run test-integration",
+    "test-unit": "mocha ./test/unit --recursive",
+    "test-integration": "mocha ./test/integration --recursive",
     "lint": "eslint ./lib ./test",
     "cover": "istanbul cover --include-all-sources node_modules/mocha/bin/_mocha -- --recursive test/unit -R spec",
     "test-travis": "npm run cover && npm run lint"

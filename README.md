@@ -14,7 +14,8 @@ Breeds the specified number of offspring from two parent strings of binary digit
 npm install
 ```
 
-## Unit Tests
+## All Tests
+This will run both unit and integration tests
 ```
 npm test
 ```
@@ -25,6 +26,7 @@ npm run lint
 ```
 
 ## Coverage
+Coverage is based on unit tests only.
 ```
 npm run cover
 ```
