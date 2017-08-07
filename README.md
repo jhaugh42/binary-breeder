@@ -11,23 +11,29 @@ Breeds the specified number of offspring from two parent strings of binary digit
 
 ## Dev Setup
 ```
-npm install -g mocha
-npm install -g istanbul
+npm install
 ```
 
-## Unit Tests
+## All Tests
+This will run both unit and integration tests
 ```
 npm test
 ```
 
+## Lint
+```
+npm run lint
+```
+
 ## Coverage
+Coverage is based on unit tests only.
 ```
 npm run cover
 ```
 
 ## Usage
 ```javascript
-var reproduce = require('binary-breeder');
+var breeder = require('binary-breeder');
 
 var numOffspring = 5;
 var mutationChance = 0.002;
@@ -36,7 +42,7 @@ var parentChromosomes = [
     '110010100110110100'
 ];
 
-var offspring = reproduce(parentChromosomes, numOffspring, mutationChance);
+var offspring = breeder.breed(parentChromosomes, numOffspring, mutationChance);
 
 /*
 sample output

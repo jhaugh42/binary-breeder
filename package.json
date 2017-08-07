@@ -4,18 +4,26 @@
   "license": "MIT",
   "version": "0.1.4",
   "main": "lib/binary-breeder.js",
+  "engines": {
+    "node": ">=4.4.7"
+  },
   "description": "Breeds the specified number of offspring from two parent strings of binary digits with the possibility of random mutation.",
   "devDependencies": {
-    "chai": "^3.2.0",
-    "coveralls": "^2.11.4",
-    "istanbul": "^0.3.19",
-    "mocha": "2.3.0",
-    "mockery": "^1.4.0"
+    "chai": "4.1.0",
+    "coveralls": "2.13.1",
+    "eslint": "4.3.0",
+    "istanbul": "0.4.5",
+    "mocha": "3.5.0",
+    "mockery": "2.1.0",
+    "sinon": "^1.17.7"
   },
   "scripts": {
-    "test": "mocha",
-    "cover": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec",
-    "test-travis": "node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec"
+    "test": "npm run test-unit && npm run test-integration",
+    "test-unit": "mocha ./test/unit --recursive",
+    "test-integration": "mocha ./test/integration --recursive",
+    "lint": "eslint ./lib ./test",
+    "cover": "istanbul cover --include-all-sources node_modules/mocha/bin/_mocha -- --recursive test/unit -R spec",
+    "test-travis": "npm run cover && npm run lint"
   },
   "keywords": [
     "genetic",
