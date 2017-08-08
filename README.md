@@ -35,14 +35,16 @@ npm run cover
 ```javascript
 var breeder = require('binary-breeder');
 
-var numOffspring = 5;
-var mutationChance = 0.002;
+var options = {
+    numOffspring: 5,
+    mutationChance: 0.002
+};
 var parentChromosomes = [
     '000011001101100101',
     '110010100110110100'
 ];
 
-var offspring = breeder.breed(parentChromosomes, numOffspring, mutationChance);
+var offspring = breeder.breed(parentChromosomes, options);
 
 /*
 sample output
